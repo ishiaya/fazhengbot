@@ -1,12 +1,12 @@
 # coding:utf-8
 
-import tweepy
+import tweepy, os
 
 # 各種キーをセット
-Consumer_key = '[Consumer_key]'
-Consumer_secret = '[Consumer_secret]'
-Access_token = '[Access_token]'
-Access_secret = '[Access_secret]'
+Consumer_key = os.environ["Consumer_key"]
+Consumer_secret = os.environ["Consumer_secret"]
+Access_token = os.environ["Access_token"]
+Access_secret = os.environ["Access_secret"]
 
 auth = tweepy.OAuthHandler(Consumer_key, Consumer_secret)
 auth.set_access_token(Access_token, Access_secret)
