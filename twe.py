@@ -36,25 +36,24 @@ def rt_func(q,count):
         print(time)
         print("ーーーーーーーーーーーー")
 
-        if user_id == "otashi4":
-                print("###ファボ判定###")
-                try:
-                    api.retweet(tweet_id) #ふぁぼる
-                    print(user_name)
-                    print("をリツイートしました")
-                    rt_count = rt_count + 1
-                    print("##################")
-                except:
-                    print("もうすでにふぁぼしてますわ")
-                print("##################")
+        print("###リツイート判定###")
+        try:
+            api.retweet(tweet_id) #リツイート
+            print(user_name)
+            print("をリツイートしました")
+            rt_count = rt_count + 1
+            print("##################")
+        except:
+            print("もうすでにリツイートしてます")
+        print("##################")
     return rt_count
 
 #本処理
 if __name__ == '__main__':
     #無双フォトかつ法正をRTする
-    print(rt_func("#無双フォト 法正",50))
+    print(rt_func("#無双フォト 法正",10))
     print("回リツイートしました。")
 
     #フォトモード乱舞かつ法正かつ無双フォトではないものをRTする
-    print(rt_func("#フォトモード乱舞 法正 -#無双フォト",50))
+    print(rt_func("#フォトモード乱舞 法正 -#無双フォト",10))
     print("回リツイートしました。")
