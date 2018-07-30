@@ -6,19 +6,7 @@ import twitter_key #.pyは書かなくてもimportできた
 api = twitter_key.api # apiと打つだけでtweetpy.apiを指示できる
 #api.update_status(status='pythonからツイートしてます') # 連続で同じ内容のツイートはできない
 
-# 検索ワードと検索数をセット
-#k_word1 = "#無双フォト 法正"
-#k_word2 = "#フォトモード乱舞 法正 -#無双フォト"
-#count = 5
-
-# 検索実行
-#search_results = api.search(q=k_word1, count=count)
-
-
-#q = "#無双フォト 法正" #ここに検索キーワードを設定
-#count = 30
-#search_results = api.search(q=q, count=count)
-
+# リツイート処理
 def rt_func(q,count):
     search_results = api.search(q=q, count=count)
     rt_count = 0
@@ -48,6 +36,39 @@ def rt_func(q,count):
         print("##################")
     return rt_count
 
+# フォロー処理
+def followAndUnfollow(api):
+    followersIds = api.followers_ids()
+    friendsIds = api.friends_ids()
+
+    #フォロアーにそのユーザが存在しなければアンフォロー
+    for friendId in friendsIds:
+        count = 0
+        for followerId in followersIds:
+            if friendId==followerId:
+                break
+            count+=1
+        if count == len(followersIds):
+            try:
+                api.destroy_friendship(friendId)
+                print ('Destoroyed friendship with %s' %friendId)
+            except tweepy.error.TweepError:
+                print ('I could not destroy this friendship.:(')
+
+    #フォローしていないフォロアーがいればフォロー
+    for followerId in followersIds:
+        count=0
+        for friendId in friendsIds:
+            if followerId == friendId:
+                break
+            count += 1
+        if count == len(friendsIds):
+            try:
+                api.create_friendship(followerId, True)
+                print ('Created friendship with %s :)' %followerId)
+            except tweepy.error.TweepError:
+                print ('I could not create this friendship.:(')
+
 #本処理
 if __name__ == '__main__':
     #無双フォトかつ法正をRTする
@@ -57,3 +78,6 @@ if __name__ == '__main__':
     #フォトモード乱舞かつ法正かつ無双フォトではないものをRTする
     print(rt_func("#フォトモード乱舞 法正 -#無双フォト",10))
     print("回リツイートしました。")
+
+    #フォロー処理をする
+    followAndUnfollow(api)
