@@ -68,7 +68,7 @@ def followAndUnfollow(api):
             #ユーザオブジェクトを取得
             user_obj = api.get_user(followerId)
             print("##################")
-            print(user_obj.user.screen_name)
+            print(user_obj.screen_name)
             print(user_obj._json['protected'] )
             if user_obj._json['protected'] == False:
                 print("鍵垢ではないのでフォローします")
