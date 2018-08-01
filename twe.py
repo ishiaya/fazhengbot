@@ -55,28 +55,37 @@ def followAndUnfollow(api):
             except tweepy.error.TweepError:
                 print ('I could not destroy this friendship.:(')
 
-    #フォローしていないフォロアーがいればフォロー
+    #フォローしていないフォロワーがいればフォロー
     for followerId in followersIds:
         count=0
+        #フォロワーの数だけカウンターを回す。相互フォローなら途中でブレイクする。
         for friendId in friendsIds:
             if followerId == friendId:
                 break
             count += 1
+        #カウント数=フォロワー数になるときは一つ前の処理でブレイクしていない。つまり相互ではない。
         if count == len(friendsIds):
-            try:
-                api.create_friendship(followerId, True)
-                print ('Created friendship with %s :)' %followerId)
-            except tweepy.error.TweepError:
-                print ('I could not create this friendship.:(')
+            #ユーザオブジェクトを取得
+            user_obj = api.get_user(followerId)
+            print("##################")
+            print(user_obj.user.screen_name)
+            print(user_obj._json['protected'] )
+            if user_obj._json['protected'] == False:
+                print("鍵垢ではないのでフォローします")
+                try:
+                    api.create_friendship(followerId, True)
+                    print ('Created friendship with %s :)' %followerId)
+                except tweepy.error.TweepError:
+                    print ('I could not create this friendship.:(')
 
 #本処理
 if __name__ == '__main__':
     #無双フォトかつ法正をRTする
-    print(rt_func("#無双フォト 法正",10))
+    print(rt_func("#無双フォト 法正",20))
     print("回リツイートしました。")
 
     #フォトモード乱舞かつ法正かつ無双フォトではないものをRTする
-    print(rt_func("#フォトモード乱舞 法正 -#無双フォト",10))
+    print(rt_func("#フォトモード乱舞 法正 -#無双フォト",20))
     print("回リツイートしました。")
 
     #フォロー処理をする
